@@ -4,10 +4,13 @@ package DAL;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import Models.Books;
 import Models.Categories;
@@ -17,9 +20,18 @@ import Models.Pages;
 import Models.Users;
 
 import Converters.Converters;
-@Database(entities = {Users.class, Books.class, Categories.class, Chapters.class, Comments.class, Pages.class}, version = 1)
+@Database(entities = {Users.class, Books.class, Categories.class, Chapters.class, Comments.class, Pages.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class BookDatabase extends RoomDatabase {
+
+    static Migration upgrade_v1_to_v2 = new Migration(1,2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+             database.execSQL("Alter table books Add Column image text");
+            database.execSQL("Alter table books Add Column views INTEGER ");
+        }
+    };
+
     private static final String DATABASE_NAME = "BookApp.db";
     private static BookDatabase instance;
 
@@ -29,6 +41,7 @@ public abstract class BookDatabase extends RoomDatabase {
                     BookDatabase.class,
                     DATABASE_NAME)
                     .allowMainThreadQueries()
+                    .addMigrations(upgrade_v1_to_v2)
                     .build();
         }
         return instance;

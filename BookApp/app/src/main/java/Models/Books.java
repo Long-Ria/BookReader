@@ -1,5 +1,6 @@
 package Models;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,9 +10,51 @@ public class Books {
     private int bookId;
     private String bookName;
     private String bookAuthor;
+    private String image;
     private int status;
     private String bookDescription;
+
+    @ColumnInfo(name = "views")
+    private Integer views;
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
+    public Books(int bookId, String bookName, String bookAuthor, String image, int status, String bookDescription, int views, int userId) {
+        this.bookId = bookId;
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
+        this.image = image;
+        this.status = status;
+        this.bookDescription = bookDescription;
+        this.views = views;
+        this.userId = userId;
+    }
+
     private int userId;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Books(int bookId, String bookName, String bookAuthor, String image, int status, String bookDescription, int userId) {
+        this.bookId = bookId;
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
+        this.image = image;
+        this.status = status;
+        this.bookDescription = bookDescription;
+        this.userId = userId;
+    }
 
     public Books() {
     }

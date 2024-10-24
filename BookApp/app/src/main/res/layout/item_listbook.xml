@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="8dp"
+    app:cardCornerRadius="4dp"
+    android:id="@+id/book_card_view"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp">
+
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+
+            android:background="@mipmap/ic_launcher_foreground"
+            android:layout_gravity="top|right"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/itembook_bookimage"
+                android:src="@drawable/baseline_wallpaper_24"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+
+                />
+
+            <TextView
+                android:id="@+id/itembook_bookname"
+                android:text=" Book Name"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/itembook_bookauthor"
+                android:text=" Book Author"
+                android:textSize="13sp"
+                android:textColor="@android:color/holo_red_light"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,20 +1,22 @@
 package DAL;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Transaction;
 
 import java.util.List;
 
-import Relationships.BookWithCategory;
+import Models.Books;
 
 @Dao
 public interface BookDAO {
 
+    @Insert
+    void insertBook(Books book);
 
-    @Transaction
+    @Query("SELECT * FROM Books WHERE bookName = :bookName AND bookAuthor = :bookAuthor LIMIT 1")
+    Books getBookByNameAndAuthor(String bookName, String bookAuthor);
+
     @Query("SELECT * FROM Books")
-    public default List<BookWithCategory> getBooksWithCategory() {
-        return null;
-    }
+    List<Books> getAllBooks();
 }

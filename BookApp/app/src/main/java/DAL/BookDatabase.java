@@ -12,6 +12,7 @@ import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import Models.BookCategoryCrossRef;
 import Models.Books;
 import Models.Categories;
 import Models.Chapters;
@@ -20,14 +21,14 @@ import Models.Pages;
 import Models.Users;
 
 import Converters.Converters;
-@Database(entities = {Users.class, Books.class, Categories.class, Chapters.class, Comments.class, Pages.class}, version = 2)
+@Database(entities = {Users.class, Books.class, Categories.class, Chapters.class, Comments.class, Pages.class, BookCategoryCrossRef.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class BookDatabase extends RoomDatabase {
 
     static Migration upgrade_v1_to_v2 = new Migration(1,2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-             database.execSQL("Alter table books Add Column image text");
+            database.execSQL("Alter table books Add Column image text");
             database.execSQL("Alter table books Add Column views INTEGER ");
         }
     };
@@ -38,8 +39,8 @@ public abstract class BookDatabase extends RoomDatabase {
     public static synchronized BookDatabase getInstance(Context context){
         if(instance == null){
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    BookDatabase.class,
-                    DATABASE_NAME)
+                            BookDatabase.class,
+                            DATABASE_NAME)
                     .allowMainThreadQueries()
                     .addMigrations(upgrade_v1_to_v2)
                     .build();
@@ -47,4 +48,7 @@ public abstract class BookDatabase extends RoomDatabase {
         return instance;
     }
     public abstract UserDAO userDAO();
+    public abstract CategoryDAO categoryDAO();
+    public abstract BookDAO bookDAO();
+    public abstract BookCategoryCrossRefDAO bookCategoryCrossRefDAO();
 }

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -16,24 +17,31 @@
         android:theme="@style/Theme.BookApp"
         tools:targetApi="31">
         <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TopViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".BookTableOfContent"
             android:exported="false" />
         <activity
             android:name=".ChapterContent"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".BookDetail"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthorActivity"
+            android:name=".AdminActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

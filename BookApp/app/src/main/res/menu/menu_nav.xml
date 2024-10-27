@@ -5,25 +5,17 @@
             android:title="@string/nav_home"
             android:icon="@drawable/baseline_home_24"/>
 
-        <item android:id="@+id/nav_author"
-            android:title="@string/nav_author"
-            android:icon="@drawable/baseline_favorite_24"/>
-
-        <item android:id="@+id/nav_search"
-            android:title="@string/nav_search"
-            android:icon="@drawable/search"/>
-
     </group>
 
     <item android:title="@string/nav_account">
         <menu>
-            <item android:id="@+id/nav_profile"
-                android:title="@string/nav_profile"
-                android:icon="@drawable/baseline_face_24"/>
 
             <item android:id="@+id/nav_change_password"
                 android:title="@string/nav_change_password"
                 android:icon="@drawable/baseline_vpn_key_24"/>
+            <item android:id="@+id/nav_log_out"
+                android:title="@string/nav_log_out"
+                android:icon="@drawable/baseline_arrow_forward_24"/>
         </menu>
     </item>
 </menu>

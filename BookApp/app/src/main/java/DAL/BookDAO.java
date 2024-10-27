@@ -19,4 +19,12 @@ public interface BookDAO {
 
     @Query("SELECT * FROM Books")
     List<Books> getAllBooks();
+
+    @Query("SELECT * FROM Books ORDER BY views DESC")
+    List<Books> getBooksByTopViews();
+
+    @Query("SELECT * FROM Books WHERE bookName = :bookName LIMIT 1")
+    Books getBookByName(String bookName);
+
+
 }

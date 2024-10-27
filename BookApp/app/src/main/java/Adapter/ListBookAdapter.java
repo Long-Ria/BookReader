@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,17 +23,20 @@ import com.example.bookapp.BookDetail;
 import com.example.bookapp.ChapterContent;
 import com.example.bookapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Models.Books;
 
-public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyViewHolder> {
+public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyViewHolder> implements Filterable {
     Context context;
     List<Books> array;
+    List<Books> arraySearch;
 
     public ListBookAdapter(List<Books> array, Context context) {
         this.array = array;
         this.context = context;
+        this.arraySearch = array;
     }
 
     @NonNull
@@ -47,7 +52,6 @@ public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyView
         Books books = array.get(position);
         holder.txtName.setText(books.getBookName());
         holder.txtAuthor.setText(books.getBookAuthor());
-
         Glide.with(context).load(books.getImage()).into(holder.img);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,4 +88,41 @@ public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyView
         }
 
     }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                List<Books> filteredList = new ArrayList<>();
+
+                if (strSearch.isEmpty()) {
+                    filteredList = arraySearch;
+                } else {
+                    for (Books books: arraySearch) {
+                        if (books.getBookName().toLowerCase().contains(strSearch.toLowerCase())) {
+                            filteredList.add(books);
+                        }
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList; // Luôn trả về danh sách hợp lệ, dù là rỗng
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                // Kiểm tra filterResults và filterResults.values để đảm bảo không bị null
+                if (filterResults != null && filterResults.values != null) {
+                    array = (List<Books>) filterResults.values;
+                    notifyDataSetChanged();
+                }
+            }
+        };
+    }
+
+
+
+
 }

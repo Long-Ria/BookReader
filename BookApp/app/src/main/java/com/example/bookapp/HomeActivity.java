@@ -1,35 +1,52 @@
 package com.example.bookapp;
 
+import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.media3.common.util.UnstableApi;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+
+import Adapter.CategoryAdapter;
 import Adapter.ListBookAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import DAL.BookDatabase;
+import DAL.UserDAO;
 import Models.BookCategoryCrossRef;
 import Models.Books;
 import Models.Categories;
 import Models.Users;
+
+import android.util.Log;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -39,29 +56,60 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView recyclerView;
     ListView listView;
     ViewFlipper viewFlipper;
+    SearchView searchView;
+    ListBookAdapter adapter;
+    Spinner spnCategory;
+    CategoryAdapter categoryAdapter;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         BookDatabase db = BookDatabase.getInstance(this);
-
-        // Insert categories, books, and cross-references
-        insertCategories(db);
-        insertBooks(db);
-        insertBookCategoryCrossRefs(db);
+        
         home();
         ActionBar();
         ActionViewFlipper();
+
         recyclerView = findViewById(R.id.book_recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // Đặt số cột là 2
         recyclerView.setLayoutManager(gridLayoutManager);
         List<Books> booksList = db.bookDAO().getAllBooks();
-        ListBookAdapter adapter = new ListBookAdapter(booksList, this);
+
+        adapter = new ListBookAdapter(booksList, this);
         recyclerView.setAdapter(adapter);
+
         insertUser(db);
+        insertAndDeleteCategories(db);
+        insertBookCategoryCrossRefs(db);
+
+
         NavigationView navigationView = findViewById(R.id.navigationview);
         navigationView.setNavigationItemSelectedListener(this);
+
+        List<Categories> categoriesList = db.categoryDAO().getAllCategories();
+        spnCategory = findViewById(R.id.spn_category);
+        categoryAdapter = new CategoryAdapter(this, R.layout.item_selected, db.categoryDAO().getAllCategories());
+        spnCategory.setAdapter(categoryAdapter);
+        spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(HomeActivity.this, categoryAdapter.getItem(i).getCategoryName(), Toast.LENGTH_SHORT).show();
+                Categories selectedCategory = categoriesList.get(i);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
+
+
 
     private void ActionViewFlipper(){
         List<String> array = new ArrayList<>();
@@ -103,13 +151,112 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawerlayout);
     }
 
-    private void insertCategories(BookDatabase db) {
-        String[] categories = new String[]{"Tiểu Thuyết", "Truyện Tranh"};
 
-        for (String categoryName : categories) {
+
+    private void insertAndDeleteCategories(BookDatabase db) {
+        String[] categoryNames = {
+                "Action", "Shounen", "Adventure", "Fantasy", "Romance",
+                "Mystery", "Horror", "Comedy", "Rom-com", "Novel", "Manhwa", "Manhua", "Manga"
+        };
+
+        // Thêm các danh mục mới nếu chưa tồn tại
+        for (String categoryName : categoryNames) {
             Categories category = db.categoryDAO().getCategoryByName(categoryName);
             if (category == null) {
-                db.categoryDAO().insertCategory(new Categories(0, categoryName));
+                db.categoryDAO().insertCategory(new Categories(0, categoryName)); // '0' vì `categoryId` tự động tăng
+            }
+        }
+
+        Categories novelCategory = db.categoryDAO().getCategoryByName("Tiểu Thuyết");
+        Categories comicCategory = db.categoryDAO().getCategoryByName("Truyện Tranh");
+
+        if (novelCategory != null) {
+            db.categoryDAO().deleteCategoryById(novelCategory.getCategoryId());
+        }
+
+        if (comicCategory != null) {
+            db.categoryDAO().deleteCategoryById(comicCategory.getCategoryId());
+        }
+    }
+
+    private void insertBookCategoryCrossRefs(BookDatabase db) {
+        // One piece categories
+        Categories actionCategory = db.categoryDAO().getCategoryByName("Action");
+        Categories shounenCategory = db.categoryDAO().getCategoryByName("Shounen");
+        Categories adventureCategory = db.categoryDAO().getCategoryByName("Adventure");
+        Categories fantasyCategory = db.categoryDAO().getCategoryByName("Fantasy");
+        Categories romanceCategory = db.categoryDAO().getCategoryByName("Romance");
+        Categories mysteryCategory = db.categoryDAO().getCategoryByName("Mystery");
+        Categories horrorCategory = db.categoryDAO().getCategoryByName("Horror");
+        Categories comedyCategory = db.categoryDAO().getCategoryByName("Comedy");
+        Categories romcomCategory = db.categoryDAO().getCategoryByName("Rom-com");
+        Categories novelCategory = db.categoryDAO().getCategoryByName("Novel");
+        Categories manhwaCategory = db.categoryDAO().getCategoryByName("Manhwa");
+        Categories manhuaCategory = db.categoryDAO().getCategoryByName("Manhua");
+        Categories mangaCategory = db.categoryDAO().getCategoryByName("Manga");
+        Books onePiece = db.bookDAO().getBookByName("One piece");
+        if (onePiece != null) {
+            insertCrossRef(db, onePiece, actionCategory);
+            insertCrossRef(db, onePiece, shounenCategory);
+            insertCrossRef(db, onePiece, adventureCategory);
+            insertCrossRef(db, onePiece, fantasyCategory);
+            insertCrossRef(db, onePiece, mangaCategory);
+        }
+
+        // Naruto categories
+        Books naruto = db.bookDAO().getBookByName("Naruto");
+        if (naruto != null) {
+            insertCrossRef(db, naruto, actionCategory);
+            insertCrossRef(db, naruto, shounenCategory);
+            insertCrossRef(db, naruto, adventureCategory);
+            insertCrossRef(db, naruto, fantasyCategory);
+            insertCrossRef(db, naruto, mangaCategory);
+        }
+
+        // Kafka bên bờ biển categories
+        Books kafka = db.bookDAO().getBookByName("Kafka bên bờ biển");
+        if (kafka != null) {
+            insertCrossRef(db, kafka, novelCategory);
+        }
+
+        // Sự im lặng của bầy cừu categories
+        Books silenceOfTheLambs = db.bookDAO().getBookByName("Sự im lặng của bầy cừu");
+        if (silenceOfTheLambs != null) {
+            insertCrossRef(db, silenceOfTheLambs, novelCategory);
+        }
+
+        // Fairy Tail categories
+        Books fairyTail = db.bookDAO().getBookByName("Fairy Tail");
+        if (fairyTail != null) {
+            insertCrossRef(db, fairyTail, actionCategory);
+            insertCrossRef(db, fairyTail, shounenCategory);
+            insertCrossRef(db, fairyTail, adventureCategory);
+            insertCrossRef(db, fairyTail, fantasyCategory);
+            insertCrossRef(db, fairyTail, mangaCategory);
+        }
+
+        // Thiên sứ nhà bên categories
+        Books angelNextDoor = db.bookDAO().getBookByName("Thiên sứ nhà bên");
+        if (angelNextDoor != null) {
+            insertCrossRef(db, angelNextDoor, novelCategory);
+            insertCrossRef(db, angelNextDoor, romanceCategory);
+            insertCrossRef(db, angelNextDoor, romcomCategory);;
+        }
+
+        // Horimiya categories
+        Books horimiya = db.bookDAO().getBookByName("Horimiya");
+        if (horimiya != null) {
+            insertCrossRef(db, horimiya, novelCategory);
+            insertCrossRef(db, horimiya, romanceCategory);
+            insertCrossRef(db, horimiya, romcomCategory);
+            insertCrossRef(db, horimiya, comedyCategory);
+        }
+    }
+
+    private void insertCrossRef(BookDatabase db, Books book, Categories category) {
+        if (category != null && book != null) {
+            if (db.bookCategoryCrossRefDAO().getCrossRefByBookAndCategory(book.getBookId(), category.getCategoryId()) == null) {
+                db.bookCategoryCrossRefDAO().insertBookCategoryCrossRef(new BookCategoryCrossRef(category.getCategoryId(),book.getBookId()));
             }
         }
     }
@@ -139,17 +286,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         booksList.add(new Books(1, "Rừng Na Uy", "Haruki Murakami",
                 "https://upload.wikimedia.org/wikipedia/vi/thumb/2/28/Norwegian-wood_poster.jpg/330px-Norwegian-wood_poster.jpg",
-                1, "Câu chuyện bắt đầu từ một chuyến bay trong ngày đông...",
+                2, "Câu chuyện bắt đầu từ một chuyến bay trong ngày đông...",
                 100, 1));
 
         booksList.add(new Books(2, "Kafka bên bờ biển", "Haruki Murakami",
-                "https://cdn.enovel.mobi/covers/26/26564-sac-duc-tam-220x283.jpg",
-                1, "Kafka bên bờ biển có hai câu chuyện song song...",
+                "https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_32831.jpg",
+                2, "Kafka bên bờ biển có hai câu chuyện song song...",
                 79, 1));
 
         booksList.add(new Books(3, "Sự im lặng của bầy cừu", "Thomas Harris",
                 "https://upload.wikimedia.org/wikipedia/vi/8/86/The_Silence_of_the_Lambs_poster.jpg",
-                1, "Những cuộc phỏng vấn ở xà lim với kẻ ăn thịt người Hannibal Lecter...",
+                2, "Những cuộc phỏng vấn ở xà lim với kẻ ăn thịt người Hannibal Lecter...",
                 119, 1));
         booksList.add(new Books(4, "One piece", "Oda Eiichiro",
                 "https://upload.wikimedia.org/wikipedia/vi/9/90/One_Piece%2C_Volume_61_Cover_%28Japanese%29.jpg",
@@ -165,11 +312,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 69, 2));
         booksList.add(new Books(7, "Thiên sứ nhà bên", "Saekisan",
                 "https://upload.wikimedia.org/wikipedia/vi/thumb/1/19/The_Angel_Next_Door_Spoils_Me_Rotten_volume_1_cover.tiff/lossy-page1-330px-The_Angel_Next_Door_Spoils_Me_Rotten_volume_1_cover.tiff.jpg",
-                2, " Fujimiya Amane sống một mình trong căn hộ của mình, và cô gái xinh nhất ở trường cậu...",
+                1, " Fujimiya Amane sống một mình trong căn hộ của mình, và cô gái xinh nhất ở trường cậu...",
                 111, 1));
         booksList.add(new Books(8, "Horimiya", "Hagiwara Daisuke",
                 "https://translate.google.com/website?sl=en&tl=vi&hl=vi&client=srp&u=https://upload.wikimedia.org/wikipedia/en/4/46/Hori-san_to_Miyamura-kun_volume_1_cover.jpg",
-                2, " Câu chuyện chủ yếu xoay quanh hai học sinh trung học: Kyouko Hori, một học sinh thông minh và nổi tiếng và Izumi Miyamura...",
+                1, " Câu chuyện chủ yếu xoay quanh hai học sinh trung học: Kyouko Hori, một học sinh thông minh và nổi tiếng và Izumi Miyamura...",
                 222, 1));
         for (Books book : booksList) {
             Books existingBook = db.bookDAO().getBookByNameAndAuthor(book.getBookName(), book.getBookAuthor());
@@ -179,39 +326,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void insertBookCategoryCrossRefs(BookDatabase db) {
-        String[] categoryNames = new String[]{"Tiểu Thuyết", "Truyện Tranh"};
-
-        for (String categoryName : categoryNames) {
-            Categories category = db.categoryDAO().getCategoryByName(categoryName);
-            if (category != null) {
-                List<Books> booksList = db.bookDAO().getAllBooks();
-                for (Books book : booksList) {
-                    BookCategoryCrossRef existingCrossRef = db.bookCategoryCrossRefDAO()
-                            .getCrossRefByBookAndCategory(book.getBookId(), category.getCategoryId());
-                    if (existingCrossRef == null) {
-                        BookCategoryCrossRef crossRef = new BookCategoryCrossRef();
-                        crossRef.bookId = book.getBookId();
-                        crossRef.categoryId = category.getCategoryId();
-                        db.bookCategoryCrossRefDAO().insertBookCategoryCrossRef(crossRef);
-                    }
-                }
-            }
-        }
-    }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.nav_home){
+        if (id == R.id.nav_home) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_author) {
-            Intent intent = new Intent(this, AuthorActivity.class);
+        } else if (id == R.id.nav_change_password) {
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            // Truyền tên đăng nhập vào Intent
+            String username = getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
             startActivity(intent);
-        } else if (id == R.id.nav_search) {
-            Intent intent = new Intent(this, SearchActivity.class);
+        } else if (id == R.id.nav_log_out) {
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
 
@@ -220,4 +349,50 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @OptIn(markerClass = UnstableApi.class)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_right, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        if (searchView != null) {
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+            searchView.setSearchableInfo(searchableInfo);
+        } else {
+            androidx.media3.common.util.Log.e("HomeActivity", "SearchView is null");
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Gọi getFilter() từ đối tượng adapter
+                adapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Gọi getFilter() từ đối tượng adapter khi nội dung tìm kiếm thay đổi
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.top_view) {
+            // Navigate to TopViewActivity when "Top View" is clicked
+            Intent intent = new Intent(this, TopViewActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

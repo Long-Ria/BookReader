@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group>
+        <item
+            android:id="@+id/top_view"
+            android:title="@string/top_view"
+            android:icon="@drawable/baseline_call_made_24" />
+    </group>
+    <item android:title="@string/status">
+        <menu>
+            <item
+                android:id="@+id/status1"
+                android:title="Completed"
+                android:icon="@drawable/baseline_done_24" />
+            <item
+                android:id="@+id/status2"
+                android:title="On Going"
+                android:icon="@drawable/baseline_new_releases_24" />
+            <item
+                android:id="@+id/status3"
+                android:title="Drop"
+                android:icon="@drawable/baseline_label_off_24" />
+        </menu>
+
+    </item>
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search"
+        android:title="@string/search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+
+
+</menu>

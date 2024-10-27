@@ -29,7 +29,6 @@
                 android:src="@drawable/baseline_wallpaper_24"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-
                 />
 
             <TextView

@@ -2,9 +2,17 @@
     <string name="app_name">BookApp</string>
 
     <string name="nav_home">Home</string>
-    <string name="nav_author">Author</string>
-    <string name="nav_search">Search</string>
     <string name="nav_account">Account</string>
-    <string name="nav_profile">My Profile</string>
     <string name="nav_change_password">Change Password</string>
+    <string name="nav_log_out">Log Out</string>"
+
+    <string name="top_view">Top View</string>
+    <string name="status">Status</string>
+
+    <string name="img_name">Name</string>"
+    <string name="search">Search</string>
+
+    <string name="category">Category</string>
+    <string name="select_category">Select category</string>
+    <string name="cate_name">Category Name</string>
 </resources>

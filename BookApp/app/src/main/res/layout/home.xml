@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context=".HomeActivity"
+    android:background="@drawable/bcakground1">
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerlayout"
         android:layout_width="match_parent"
@@ -16,27 +17,40 @@
             android:layout_height="match_parent">
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                app:title="Homepage"
-                android:background="#ff00dfff"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+                app:title=" "
 
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+
+                >
             </androidx.appcompat.widget.Toolbar>
+            <Spinner
+                android:id="@+id/spn_category"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="3dp"
+                android:background="@android:color/transparent"
+                android:popupBackground="#F9F9C5">
+
+            </Spinner>
             <ViewFlipper
                 android:id="@+id/viewflipper"
                 android:layout_width="match_parent"
-                android:layout_height="330dp">
+                android:layout_height="330dp"
+                >
 
             </ViewFlipper>
             <LinearLayout
-                android:background="#5992d2"
+
+
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
-                    android:textSize="20sp"
+                    android:textSize="25sp"
+                    android:fontFamily="cursive"
+                    android:textColor="#ffffff"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@android:color/holo_red_light"
                     android:textStyle="bold"
                     android:text="New Book"
                     android:layout_width="wrap_content"
@@ -45,7 +59,8 @@
                     android:id="@+id/book_recycler_view"
                     android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    >
 
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>

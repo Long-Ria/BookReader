@@ -122,6 +122,11 @@ public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyView
         };
     }
 
+    public void updateBookList(List<Books> newBookList) {
+        this.array = newBookList;  // Update the book list
+        notifyDataSetChanged();        // Notify the adapter to refresh the view
+    }
+
 
 
 

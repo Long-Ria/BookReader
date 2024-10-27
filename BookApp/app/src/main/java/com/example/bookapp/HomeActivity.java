@@ -60,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ListBookAdapter adapter;
     Spinner spnCategory;
     CategoryAdapter categoryAdapter;
+    BookDatabase db;
 
 
 
@@ -67,8 +68,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-        BookDatabase db = BookDatabase.getInstance(this);
-        
+        db = BookDatabase.getInstance(this);
+
         home();
         ActionBar();
         ActionViewFlipper();
@@ -91,22 +92,42 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         List<Categories> categoriesList = db.categoryDAO().getAllCategories();
         spnCategory = findViewById(R.id.spn_category);
-        categoryAdapter = new CategoryAdapter(this, R.layout.item_selected, db.categoryDAO().getAllCategories());
+        List<Categories> cate = new ArrayList<>();
+        cate.add(new Categories(0, "All"));
+        cate.addAll(categoriesList);
+        categoryAdapter = new CategoryAdapter(this, R.layout.item_selected, cate);
         spnCategory.setAdapter(categoryAdapter);
         spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(HomeActivity.this, categoryAdapter.getItem(i).getCategoryName(), Toast.LENGTH_SHORT).show();
-                Categories selectedCategory = categoriesList.get(i);
+//                Toast.makeText(HomeActivity.this, categoryAdapter.getItem(i).getCategoryName(), Toast.LENGTH_SHORT).show();
+                if (i > 0) {
+                    Categories selectedCategory = categoriesList.get(i);
+                    displayBooksByCategory(selectedCategory.getCategoryId());
+                } else {
+                    // Nếu không có category nào được chọn, hiển thị toàn bộ sách
+                    displayAllBooks();
+                }
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                displayAllBooks();
             }
         });
 
+    }
+
+    private void displayBooksByCategory(int categoryId) {
+
+        List<Books> booksByCategory = db.bookCategoryCrossRefDAO().getBooksByCategory(categoryId);
+        adapter.updateBookList(booksByCategory);
+    }
+
+    private void displayAllBooks() {
+        List<Books> allBooks = db.bookDAO().getAllBooks();
+        adapter.updateBookList(allBooks);
     }
 
 

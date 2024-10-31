@@ -109,7 +109,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Categories selectedCategory = categoriesList.get(i);
                     displayBooksByCategory(selectedCategory.getCategoryId());
                 } else {
-                    // Nếu không có category nào được chọn, hiển thị toàn bộ sách
                     displayAllBooks();
                 }
 
@@ -134,27 +133,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         adapter.updateBookList(allBooks);
     }
 
+    private List<Books> getTopViewBooks(BookDatabase db) {
+        List<Books> allBooks = db.bookDAO().getAllBooks();
 
+        allBooks.sort((book1, book2) -> Integer.compare(book2.getViews(), book1.getViews()));
+        // Return the top 3
+        return allBooks.subList(0, Math.min(allBooks.size(), 3));
+    }
 
-    private void ActionViewFlipper(){
-        List<String> array = new ArrayList<>();
-        array.add("https://upload.wikimedia.org/wikipedia/vi/thumb/2/28/Norwegian-wood_poster.jpg/330px-Norwegian-wood_poster.jpg");
-        array.add("https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_32831.jpg");
-        array.add("https://cdn0.fahasa.com/media/catalog/product/i/m/image_180812.jpg");
-        for(int i=0; i<array.size();i++){
+    private void ActionViewFlipper() {
+        List<Books> topBooks = getTopViewBooks(db);
+        viewFlipper.removeAllViews();
+
+        for (Books book : topBooks) {
             ImageView imageView = new ImageView(getApplicationContext());
-            Glide.with(getApplicationContext()).load(array.get(i)).into(imageView);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            Glide.with(getApplicationContext()).load(book.getImage()).into(imageView); // Assuming imageUrl is the field in your Books model
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setTag(book); // Set the book as a tag for later reference
             viewFlipper.addView(imageView);
+
         }
+
         viewFlipper.setFlipInterval(3000);
         viewFlipper.setAutoStart(true);
         Animation slide_show_right = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_show_right);
         Animation slide_out_right = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
         viewFlipper.setInAnimation(slide_show_right);
         viewFlipper.setOutAnimation(slide_out_right);
-
     }
+
 
     private void ActionBar(){
         setSupportActionBar(toolbar);
@@ -425,7 +432,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         } else if (id == R.id.nav_change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
-            // Truyền tên đăng nhập vào Intent
+
             String username = getIntent().getStringExtra("username");
             intent.putExtra("username", username);
             startActivity(intent);
@@ -456,14 +463,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Gọi getFilter() từ đối tượng adapter
+
                 adapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Gọi getFilter() từ đối tượng adapter khi nội dung tìm kiếm thay đổi
+
                 adapter.getFilter().filter(newText);
                 return false;
             }

@@ -2,6 +2,7 @@ package Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,13 @@ import com.example.bookapp.R;
 
 import java.util.List;
 
+import Converters.TimeAgo;
 import Models.Chapters;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder>{
     private Context mContext;
     private List<Chapters> listChapter;
-
+    private int currentIndex = -1;
     public ChapterAdapter(Context mContext){
         this.mContext = mContext;
     }
@@ -37,7 +39,12 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
         return new ChapterViewHolder(view);
     }
-
+    public void setCurrentIndex(int newIndex) {
+        int previousIndex = currentIndex;
+        currentIndex = newIndex;
+        notifyItemChanged(previousIndex);
+        notifyItemChanged(newIndex);
+    }
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
             final Chapters chapter = listChapter.get(position);
@@ -45,7 +52,12 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
                 return;
             }
 
-            holder.tvChapterId.setText(chapter.getChapterId() + "");
+            if (position == currentIndex) {
+                holder.itemView.setBackgroundColor(Color.parseColor("#EEEEEE"));
+            } else {
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
+            holder.tvChapterUpdated.setText(TimeAgo.timeAgo(chapter.getCreatedDate()));
             holder.tvChapterName.setText(chapter.getChapterName());
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,13 +85,13 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
     public class ChapterViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView tvChapterId;
+        private TextView tvChapterUpdated;
         private TextView tvChapterName;
         private LinearLayout linearLayout;
 
         public ChapterViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvChapterId = itemView.findViewById(R.id.tv_chapterId);
+            tvChapterUpdated = itemView.findViewById(R.id.tv_chapterUpdated);
             tvChapterName = itemView.findViewById(R.id.tv_chapterName);
             linearLayout = itemView.findViewById(R.id.chapter_recycler_view);
         }

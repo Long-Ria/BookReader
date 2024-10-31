@@ -6,24 +6,23 @@
     android:layout_margin="10dp">
 
     <TextView
-        android:id="@+id/tv_chapterId"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:text="Number"
-        android:layout_centerVertical = "true"
-        android:layout_weight="1"
-        />
-
-    <TextView
         android:id="@+id/tv_chapterName"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_weight="1"
         android:text="Chapter Name"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_chapterUpdated"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_weight="3"
+        android:text="Time"
         android:textSize="16dp" />
 
 </LinearLayout>

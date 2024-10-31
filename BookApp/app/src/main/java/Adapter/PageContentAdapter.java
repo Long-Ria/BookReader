@@ -21,9 +21,10 @@ public class PageContentAdapter extends RecyclerView.Adapter<PageContentAdapter.
 
     private Context mContext;
     private List<Pages> listPages;
-
-    public PageContentAdapter(Context mContext){
+    private boolean isImage;
+    public PageContentAdapter(Context mContext, boolean isImage){
         this.mContext = mContext;
+        this.isImage = isImage;
     }
 
     public void setData(List<Pages> listPages){
@@ -34,7 +35,14 @@ public class PageContentAdapter extends RecyclerView.Adapter<PageContentAdapter.
     @NonNull
     @Override
     public PageContentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_content, parent, false);
+        View view;
+        if(isImage){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_content_image, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_content_text, parent, false);
+        }
+
+
         return new PageContentViewHolder(view);
     }
 
@@ -45,13 +53,17 @@ public class PageContentAdapter extends RecyclerView.Adapter<PageContentAdapter.
             return;
         }
         String imageUrl = page.getContent();
+        if(imageUrl.startsWith("http") || imageUrl.startsWith("content")){
+            // Sử dụng Glide để tải ảnh
+            Glide.with(mContext)
+                    .load(imageUrl)
+                    .error(R.drawable.error_image)
+                    .placeholder(R.drawable.loading_image)
+                    .into(holder.ivPage);
+        } else {
+            holder.tvPage.setText(page.getContent());
+        }
 
-        // Sử dụng Glide để tải ảnh
-        Glide.with(mContext)
-                .load(imageUrl)
-                .error(R.drawable.error_image)
-                .placeholder(R.drawable.loading_image)
-                .into(holder.ivPage);
 
     }
 
@@ -66,10 +78,11 @@ public class PageContentAdapter extends RecyclerView.Adapter<PageContentAdapter.
     public class PageContentViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView ivPage;
-
+        private TextView tvPage;
         public PageContentViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivPage = itemView.findViewById(R.id.page_content);
+            ivPage = itemView.findViewById(R.id.page_content_image);
+            tvPage = itemView.findViewById(R.id.page_content_text);
         }
     }
 }

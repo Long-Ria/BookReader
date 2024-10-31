@@ -14,6 +14,7 @@ public class Chapters implements Serializable {
     private Date createdDate;
     private int bookId;
 
+
     public Chapters() {
     }
 

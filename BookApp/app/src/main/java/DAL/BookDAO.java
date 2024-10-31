@@ -3,6 +3,7 @@ package DAL;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -26,5 +27,9 @@ public interface BookDAO {
     @Query("SELECT * FROM Books WHERE bookName = :bookName LIMIT 1")
     Books getBookByName(String bookName);
 
+    @Query("SELECT * FROM Books WHERE bookId = :bookId LIMIT 1")
+    Books getBookById(int bookId);
 
+    @Query("UPDATE Books SET views = views + 1 WHERE bookId = :bookId")
+    void updateViews(int bookId);
 }

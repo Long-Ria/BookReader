@@ -44,6 +44,8 @@ import DAL.UserDAO;
 import Models.BookCategoryCrossRef;
 import Models.Books;
 import Models.Categories;
+import Models.Chapters;
+import Models.Pages;
 import Models.Users;
 
 import android.util.Log;
@@ -85,10 +87,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         insertUser(db);
         insertAndDeleteCategories(db);
         insertBookCategoryCrossRefs(db);
-
-
         NavigationView navigationView = findViewById(R.id.navigationview);
         navigationView.setNavigationItemSelectedListener(this);
+
+        
 
         List<Categories> categoriesList = db.categoryDAO().getAllCategories();
         spnCategory = findViewById(R.id.spn_category);
@@ -200,6 +202,98 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void insertPage(BookDatabase db) {
+
+
+        for (int i = 1; i <= 22; i++) {
+            Pages page = new Pages();
+            page.setPageNumber(i);
+            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/1/"+i+".jpg");
+            page.setChapterId(1);
+            db.pageDAO().insertPage(page);
+        }
+
+        for (int i = 1; i <= 21; i++) {
+            Pages page = new Pages();
+            page.setPageNumber(i);
+            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/2/"+i+".jpg");
+            page.setChapterId(2);
+            db.pageDAO().insertPage(page);
+        }
+
+        for (int i = 1; i <= 20; i++) {
+            Pages page = new Pages();
+            page.setPageNumber(i);
+            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/3/"+i+".jpg");
+            page.setChapterId(3);
+            db.pageDAO().insertPage(page);
+        }
+
+        for (int i = 1; i <= 19; i++) {
+            Pages page = new Pages();
+            page.setPageNumber(i);
+            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/4/"+i+".jpg");
+            page.setChapterId(4);
+            db.pageDAO().insertPage(page);
+        }
+
+        for (int i = 1; i <= 21; i++) {
+            Pages page = new Pages();
+            page.setPageNumber(i);
+            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/5/"+i+".jpg");
+            page.setChapterId(5);
+            db.pageDAO().insertPage(page);
+        }
+
+        for (int i = 1; i <= 20; i++) {
+            Pages page = new Pages();
+            page.setPageNumber(i);
+            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/6/"+i+".jpg");
+            page.setChapterId(6);
+            db.pageDAO().insertPage(page);
+        }
+
+    }
+
+    private void insertChapter(BookDatabase db) {
+        Chapters chapter1 = new Chapters();
+        chapter1.setChapterName("Chapter 1");
+        chapter1.setCreatedDate(new Date());
+        chapter1.setBookId(9);
+
+        Chapters chapter2 = new Chapters();
+        chapter2.setChapterName("Chapter 2");
+        chapter2.setCreatedDate(new Date());
+        chapter2.setBookId(9);
+
+        Chapters chapter3 = new Chapters();
+        chapter3.setChapterName("Chapter 3");
+        chapter3.setCreatedDate(new Date());
+        chapter3.setBookId(9);
+
+        Chapters chapter4 = new Chapters();
+        chapter4.setChapterName("Chapter 4");
+        chapter4.setCreatedDate(new Date());
+        chapter4.setBookId(9);
+
+        Chapters chapter5 = new Chapters();
+        chapter5.setChapterName("Chapter 5");
+        chapter5.setCreatedDate(new Date());
+        chapter5.setBookId(9);
+
+        Chapters chapter6 = new Chapters();
+        chapter6.setChapterName("Chapter 6");
+        chapter6.setCreatedDate(new Date());
+        chapter6.setBookId(9);
+
+
+        db.chapterDAO().insertChapter(chapter1);
+        db.chapterDAO().insertChapter(chapter2);
+        db.chapterDAO().insertChapter(chapter3);
+        db.chapterDAO().insertChapter(chapter4);
+        db.chapterDAO().insertChapter(chapter5);
+        db.chapterDAO().insertChapter(chapter6);
+    }
     private void insertBookCategoryCrossRefs(BookDatabase db) {
         // One piece categories
         Categories actionCategory = db.categoryDAO().getCategoryByName("Action");
@@ -272,6 +366,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             insertCrossRef(db, horimiya, romcomCategory);
             insertCrossRef(db, horimiya, comedyCategory);
         }
+
+        // FairyTail100 categories
+        Books fairyTail100 = db.bookDAO().getBookByName("Fairy Tail: Nhiệm vụ trăm năm");
+        if (fairyTail100 != null) {
+            insertCrossRef(db, fairyTail100, mangaCategory);
+            insertCrossRef(db, fairyTail100, adventureCategory);
+            insertCrossRef(db, fairyTail100, actionCategory);
+            insertCrossRef(db, fairyTail100, shounenCategory);
+            insertCrossRef(db, fairyTail100, fantasyCategory);
+
+        }
+
     }
 
     private void insertCrossRef(BookDatabase db, Books book, Categories category) {
@@ -339,6 +445,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 "https://translate.google.com/website?sl=en&tl=vi&hl=vi&client=srp&u=https://upload.wikimedia.org/wikipedia/en/4/46/Hori-san_to_Miyamura-kun_volume_1_cover.jpg",
                 1, " Câu chuyện chủ yếu xoay quanh hai học sinh trung học: Kyouko Hori, một học sinh thông minh và nổi tiếng và Izumi Miyamura...",
                 222, 1));
+        booksList.add(new Books(9, "Fairy Tail: Nhiệm vụ trăm năm", "Hiro Mashima",
+                "https://upload.wikimedia.org/wikipedia/en/e/e8/Fairy_Tail_100_Years_Quest%2C_Vol_1.jpg",
+                1, "Tuyện tiếp nối chap 545 của Fairy Tail, khi nhóm Natsu đi làm nhiệm vụ trăm năm.\n" +
+                "Đây chỉ là một phần nhỏ trong hành trình của Hội Pháp Sư Nhiệm Vụ Trăm Năm – câu chuyện còn ẩn chứa nhiều bất ngờ và kịch tính hơn nữa, chắc chắn sẽ khiến bạn không thể rời mắt.",
+                321, 1));
         for (Books book : booksList) {
             Books existingBook = db.bookDAO().getBookByNameAndAuthor(book.getBookName(), book.getBookAuthor());
             if (existingBook == null) {

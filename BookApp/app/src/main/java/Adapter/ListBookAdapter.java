@@ -26,17 +26,19 @@ import com.example.bookapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import DAL.BookDatabase;
 import Models.Books;
 
 public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyViewHolder> implements Filterable {
     Context context;
     List<Books> array;
     List<Books> arraySearch;
-
+    BookDatabase db;
     public ListBookAdapter(List<Books> array, Context context) {
         this.array = array;
         this.context = context;
         this.arraySearch = array;
+        db = BookDatabase.getInstance(context);
     }
 
     @NonNull
@@ -69,7 +71,8 @@ public class ListBookAdapter extends RecyclerView.Adapter<ListBookAdapter.MyView
     private void bookItemOnclick(Books book){
         Intent intent = new Intent(context, BookDetail.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("book", book);
+        Books b = db.bookDAO().getBookById(book.getBookId());
+        bundle.putSerializable("book", b);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

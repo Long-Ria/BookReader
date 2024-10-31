@@ -47,6 +47,9 @@ public abstract class BookDatabase extends RoomDatabase {
         }
         return instance;
     }
+
+    public abstract PageDAO pageDAO();
+    public abstract ChapterDAO chapterDAO();
     public abstract UserDAO userDAO();
     public abstract CategoryDAO categoryDAO();
     public abstract BookDAO bookDAO();

@@ -38,4 +38,6 @@ public interface BookCategoryCrossRefDAO {
     @Query("SELECT * FROM BookCategoryCrossRef WHERE bookId = :bookId")
     List<BookCategoryCrossRef> getBookCategoryByBookId(int bookId);
 
+    @Query("Delete FROM BookCategoryCrossRef WHERE categoryId = :categoryId")
+    void deleteBookCategoryByCategoryId(int categoryId);
 }

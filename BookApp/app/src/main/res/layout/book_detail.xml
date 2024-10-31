@@ -1,143 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/book_detail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bcakground1"
+    >
 
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <!-- Nền chính chứa toàn bộ nội dung màn hình -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
+        <!-- Layout chứa ảnh và thông tin sách -->
 
-
-        <!-- Phần 1: Ảnh, chiếm 3/10 chiều rộng -->
-        <ImageView
-            android:id="@+id/iv_book_image"
-            android:layout_width="120dp"
-            android:layout_height="300dp"
-            android:layout_weight="5"
-            android:src="@drawable/ic_launcher_background" />
-
-        <!-- Phần 2: LinearLayout, chiếm 7/10 chiều rộng -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Các thành phần bên trong LinearLayout con -->
-            <TextView
-                android:id="@+id/tv_book_name"
-                android:layout_width="wrap_content"
+            <!-- Phần 1: Ảnh, chiếm 3/10 chiều rộng -->
+
+            <!-- Phần 2: LinearLayout, chiếm 7/10 chiều rộng -->
+
+            <ImageView
+                android:id="@+id/iv_book_image"
+                android:layout_width="120dp"
+                android:layout_height="300dp"
+                android:layout_weight="5"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_launcher_background" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Title"
-                android:textColor="#000"
-                android:textSize="18sp" />
+                android:layout_weight="5"
+                android:orientation="vertical"
 
-            <TextView
-                android:id="@+id/tv_book_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Author"
-                android:textColor="#666"
-                android:textSize="14sp" />
+                android:padding="8dp">
 
+                <TextView
+                    android:id="@+id/tv_book_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_book_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Author"
+                    android:textColor="#666"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_weight="1"
+                        android:text="Views" />
+
+                    <TextView
+                        android:id="@+id/tv_book_views"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="1000" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-
-            android:layout_width="134dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="40dp"
-            android:layout_weight="1"
-            android:text="Views" />
-
-        <TextView
-            android:id="@+id/tv_book_views"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="40dp"
-            android:text="1000" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <!-- Layout cha (Vertical orientation) -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genres"
-            android:textSize="20sp" />
-
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/category_tag_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-
-        <!-- Các view khác -->
-        <TextView
-            android:id="@+id/tv_books_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Description"
-            android:textSize="20sp" />
-
-
-        <TextView
-            android:id="@+id/tv_lastest_chapter"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:text="Lastest Chapter"
-            android:textSize="20sp" />
-    </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                android:padding="16dp">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Genres"
+                    android:textSize="20sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/category_tag_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_books_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Description"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_lastest_chapter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Lastest Chapter"
+                    android:textSize="24sp"
+                    android:textColor="#260D03"
+                    android:background="#BFBEBB"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="#66000000"
+            android:contentDescription="Back"
+            android:elevation="8dp"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Nút quay lại nổi lên trên -->
+</FrameLayout>

@@ -353,6 +353,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.nav_home) {
             Intent intent = new Intent(this, HomeActivity.class);
+            String username = getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
             startActivity(intent);
         } else if (id == R.id.nav_change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
@@ -410,6 +412,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.top_view) {
             // Navigate to TopViewActivity when "Top View" is clicked
             Intent intent = new Intent(this, TopViewActivity.class);
+            String username = getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
             startActivity(intent);
             return true;
         }

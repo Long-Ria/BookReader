@@ -27,6 +27,8 @@ public class TopViewActivity extends AppCompatActivity implements NavigationView
     NavigationView navigationView;
     RecyclerView recyclerView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +60,22 @@ public class TopViewActivity extends AppCompatActivity implements NavigationView
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_menu_24);  // Sử dụng biểu tượng menu tùy thích
 
 
+
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.nav_home){
+        if (id == R.id.nav_home) {
             Intent intent = new Intent(this, HomeActivity.class);
+            String username = getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
             startActivity(intent);
         } else if (id == R.id.nav_change_password) {
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            // Truyền tên đăng nhập vào Intent
+            String username = getIntent().getStringExtra("username");
+            intent.putExtra("username", username);
             startActivity(intent);
         } else if (id == R.id.nav_log_out) {
             Intent intent = new Intent(this, LoginActivity.class);
@@ -85,4 +93,7 @@ public class TopViewActivity extends AppCompatActivity implements NavigationView
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }

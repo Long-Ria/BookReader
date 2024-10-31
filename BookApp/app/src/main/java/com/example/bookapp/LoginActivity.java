@@ -62,8 +62,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void authenticateUser() {
-        String username = usernameInput.getText().toString();
-        String password = passwordInput.getText().toString();
+        String username = usernameInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Username and password cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Executors.newSingleThreadExecutor().execute(() -> {
             Users user = userDAO.getUserByUsername(username);

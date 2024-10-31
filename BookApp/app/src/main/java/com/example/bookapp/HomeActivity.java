@@ -205,59 +205,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void insertPage(BookDatabase db) {
+        // Check if pages already exist for the chapters
+        for (int chapterId = 1; chapterId <= 6; chapterId++) {
+            List<Pages> existingPages = db.pageDAO().getPagesByChapterId(chapterId);
+            if (!existingPages.isEmpty()) {
+                // Pages already exist for this chapter, skip inserting pages
+                continue;
+            }
 
-
-        for (int i = 1; i <= 22; i++) {
-            Pages page = new Pages();
-            page.setPageNumber(i);
-            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/1/"+i+".jpg");
-            page.setChapterId(1);
-            db.pageDAO().insertPage(page);
+            // Proceed to insert pages only if they don't already exist
+            for (int i = 1; i <= 22; i++) { // Adjust the range according to your chapter page count
+                Pages page = new Pages();
+                page.setPageNumber(i);
+                page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/" + chapterId + "/" + i + ".jpg");
+                page.setChapterId(chapterId);
+                db.pageDAO().insertPage(page);
+            }
         }
-
-        for (int i = 1; i <= 21; i++) {
-            Pages page = new Pages();
-            page.setPageNumber(i);
-            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/2/"+i+".jpg");
-            page.setChapterId(2);
-            db.pageDAO().insertPage(page);
-        }
-
-        for (int i = 1; i <= 20; i++) {
-            Pages page = new Pages();
-            page.setPageNumber(i);
-            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/3/"+i+".jpg");
-            page.setChapterId(3);
-            db.pageDAO().insertPage(page);
-        }
-
-        for (int i = 1; i <= 19; i++) {
-            Pages page = new Pages();
-            page.setPageNumber(i);
-            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/4/"+i+".jpg");
-            page.setChapterId(4);
-            db.pageDAO().insertPage(page);
-        }
-
-        for (int i = 1; i <= 21; i++) {
-            Pages page = new Pages();
-            page.setPageNumber(i);
-            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/5/"+i+".jpg");
-            page.setChapterId(5);
-            db.pageDAO().insertPage(page);
-        }
-
-        for (int i = 1; i <= 20; i++) {
-            Pages page = new Pages();
-            page.setPageNumber(i);
-            page.setContent("https://ddntcthcd.com/nettruyen/hoi-phap-su-nhiem-vu-tram-nam/6/"+i+".jpg");
-            page.setChapterId(6);
-            db.pageDAO().insertPage(page);
-        }
-
     }
 
+
     private void insertChapter(BookDatabase db) {
+        List<Chapters> existingChapters = db.chapterDAO().getChaptersByBookId(9);
+        if (!existingChapters.isEmpty()) {
+            return;
+        }
         Chapters chapter1 = new Chapters();
         chapter1.setChapterName("Chapter 1");
         chapter1.setCreatedDate(new Date());
@@ -295,6 +267,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         db.chapterDAO().insertChapter(chapter4);
         db.chapterDAO().insertChapter(chapter5);
         db.chapterDAO().insertChapter(chapter6);
+
+
     }
     private void insertBookCategoryCrossRefs(BookDatabase db) {
         // One piece categories

@@ -37,34 +37,55 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Set up sign-up button click listener
         signUpButton.setOnClickListener(v -> registerUser());
+
+        TextView signInText = findViewById(R.id.textView4);
+        signInText.setOnClickListener(v -> startActivity(new Intent(SignUpActivity.this, LoginActivity.class)));
     }
 
     private void registerUser() {
-        String username = usernameInput.getText().toString();
-        String password = passwordInput.getText().toString();
-        String rePassword = rePasswordInput.getText().toString();
+        String username = usernameInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
+        String rePassword = rePasswordInput.getText().toString().trim();
+
+
+        if (username.isEmpty() || password.isEmpty() || rePassword.isEmpty() ||
+                password.contains(" ") || rePassword.contains(" ")) {
+            Toast.makeText(this, "Username and passwords cannot be empty or contain spaces", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (!password.equals(rePassword)) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Users newUser = new Users();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.setEmail("");  // Update as needed if other fields are added
-        newUser.setPhoneNumber("");
-        newUser.setCreatedDate(new Date());
-        newUser.setRole(2);  // Default role for new user
-
         Executors.newSingleThreadExecutor().execute(() -> {
-            userDAO.insertUser(newUser);
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-            });
+            // Check if the username already exists
+            Users existingUser = userDAO.getUserByUsername(username);
+
+            if (existingUser != null) {
+                // If user already exists, show a message
+                runOnUiThread(() -> Toast.makeText(this, "Username already exists", Toast.LENGTH_SHORT).show());
+            } else {
+                // Proceed with registration if username is unique
+                Users newUser = new Users();
+                newUser.setUsername(username);
+                newUser.setPassword(password);
+                newUser.setEmail("");  // Update as needed if other fields are added
+                newUser.setPhoneNumber("");
+                newUser.setCreatedDate(new Date());
+                newUser.setRole(2);  // Default role for new user
+
+                userDAO.insertUser(newUser);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                });
+            }
         });
     }
+
 
 
 }

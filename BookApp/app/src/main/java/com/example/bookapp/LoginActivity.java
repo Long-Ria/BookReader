@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Date;
 import java.util.concurrent.Executors;
 
 import DAL.BookDatabase;
@@ -28,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = findViewById(R.id.editTextTextPersonName);
         passwordInput = findViewById(R.id.editTextTextPersonName2);
         loginButton = findViewById(R.id.button_login);
-
+        insertUser(dbBookDatabase.getInstance(this));
         userDAO = dbBookDatabase.getInstance(this).userDAO();
 
         loginButton.setOnClickListener(v -> authenticateUser());
@@ -37,6 +39,26 @@ public class LoginActivity extends AppCompatActivity {
         TextView signUpText = findViewById(R.id.textView4);
         signUpText.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, SignUpActivity.class)));
 
+    }
+
+    private void insertUser(BookDatabase db){
+        Users user = new Users();
+        user.setUsername("admin");
+        user.setPassword("admin");
+        user.setRole(1);
+        user.setCreatedDate(new Date());
+        if(db.userDAO().getUserByUsername("admin") == null){
+            db.userDAO().insertUser(user);
+        }
+
+        //
+        user.setUsername("user");
+        user.setPassword("user");
+        user.setCreatedDate(new Date());
+        user.setRole(2);
+        if(db.userDAO().getUserByUsername("user") == null){
+            db.userDAO().insertUser(user);
+        }
     }
 
     private void authenticateUser() {

@@ -84,9 +84,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         adapter = new ListBookAdapter(booksList, this);
         recyclerView.setAdapter(adapter);
 
-        insertUser(db);
+        insertBooks(db);
         insertAndDeleteCategories(db);
         insertBookCategoryCrossRefs(db);
+        insertChapter(db);
+        insertPage(db);
         NavigationView navigationView = findViewById(R.id.navigationview);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -387,27 +389,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
-    private void insertUser(BookDatabase db){
-        Users user = new Users();
-        user.setUserId(1);
-        user.setUsername("admin");
-        user.setPassword("admin");
-        user.setRole(1);
-        user.setCreatedDate(new Date());
-        if(db.userDAO().getUserByUsername("admin") == null){
-            db.userDAO().insertUser(user);
-        }
 
-        //
-        user.setUserId(2);
-        user.setUsername("user");
-        user.setPassword("user");
-        user.setCreatedDate(new Date());
-        user.setRole(2);
-        if(db.userDAO().getUserByUsername("user") == null){
-            db.userDAO().insertUser(user);
-        }
-    }
     private void insertBooks(BookDatabase db) {
         List<Books> booksList = new ArrayList<>();
 

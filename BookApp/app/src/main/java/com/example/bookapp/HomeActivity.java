@@ -195,7 +195,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         String[] categoryNames = {
                 "Action", "Shounen", "Adventure", "Fantasy", "Romance",
                 "Mystery", "Horror", "Comedy", "Rom-com", "Novel", "Manhwa", "Manhua", "Manga", " Philosophy", "Culture",
-                "Education"
+                "Education", "Detective"
         };
 
         // Thêm các danh mục mới nếu chưa tồn tại
@@ -284,22 +284,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
     private void insertBookCategoryCrossRefs(BookDatabase db) {
         // One piece categories
-        Categories actionCategory = db.categoryDAO().getCategoryById(1);
-        Categories shounenCategory = db.categoryDAO().getCategoryById(2);
-        Categories adventureCategory = db.categoryDAO().getCategoryById(3);
-        Categories fantasyCategory = db.categoryDAO().getCategoryById(4);
-        Categories romanceCategory = db.categoryDAO().getCategoryById(5);
-        Categories mysteryCategory = db.categoryDAO().getCategoryById(6);
-        Categories horrorCategory = db.categoryDAO().getCategoryById(7);
-        Categories comedyCategory = db.categoryDAO().getCategoryById(8);
-        Categories romcomCategory = db.categoryDAO().getCategoryById(9);
-        Categories novelCategory = db.categoryDAO().getCategoryById(10);
-        Categories manhwaCategory = db.categoryDAO().getCategoryById(11);
-        Categories manhuaCategory = db.categoryDAO().getCategoryById(12);
-        Categories mangaCategory = db.categoryDAO().getCategoryById(13);
-        Categories philosophyCategory = db.categoryDAO().getCategoryById(14);
-        Categories cultureCategory = db.categoryDAO().getCategoryById(15);
-        Categories educationCategory = db.categoryDAO().getCategoryById(16);
+        Categories actionCategory = db.categoryDAO().getCategoryById(2);
+        Categories shounenCategory = db.categoryDAO().getCategoryById(3);
+        Categories adventureCategory = db.categoryDAO().getCategoryById(4);
+        Categories fantasyCategory = db.categoryDAO().getCategoryById(5);
+        Categories romanceCategory = db.categoryDAO().getCategoryById(6);
+        Categories mysteryCategory = db.categoryDAO().getCategoryById(7);
+        Categories horrorCategory = db.categoryDAO().getCategoryById(8);
+        Categories comedyCategory = db.categoryDAO().getCategoryById(9);
+        Categories romcomCategory = db.categoryDAO().getCategoryById(10);
+        Categories novelCategory = db.categoryDAO().getCategoryById(11);
+        Categories manhwaCategory = db.categoryDAO().getCategoryById(12);
+        Categories manhuaCategory = db.categoryDAO().getCategoryById(13);
+        Categories mangaCategory = db.categoryDAO().getCategoryById(14);
+        Categories philosophyCategory = db.categoryDAO().getCategoryById(15);
+        Categories cultureCategory = db.categoryDAO().getCategoryById(16);
+        Categories educationCategory = db.categoryDAO().getCategoryById(17);
+        Categories detectiveCategory = db.categoryDAO().getCategoryById(18);
+
+        Books naUy = db.bookDAO().getBookById(1);
+        if (naUy != null) {
+            insertCrossRef(db, naUy, novelCategory);
+        }
+
         Books onePiece = db.bookDAO().getBookById(4);
         if (onePiece != null) {
             insertCrossRef(db, onePiece, actionCategory);
@@ -376,6 +383,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+        Books Hoahoc = db.bookDAO().getBookById(11);
+        if (Hoahoc != null) {
+            insertCrossRef(db, Hoahoc, educationCategory);
+        }
+
 
     }
 
@@ -432,6 +444,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         booksList.add(new Books(10, "Giáo trình kinh tế chính trị Mác-Lênin", "PGS.TS. Ngô Tuấn Nghĩa (Chủ biên)",
                 "https://images.sachquocgia.vn/Picture/2024/3/21/image-20240321140730843.jpg",
                 1, "Nội dung giáo trình gồm 6 chương: - Chương 1: Đối tượng, phương pháp nghiên cứu và chức năng của kinh tế chính trị Mác - Lênin; - Chương 2: Hàng hóa, thị trường và vai trò của các chủ thể tham gia thị trường; - Chương 3: Giá trị thặng dư trong nền kinh tế thị trường; - Chương 4: Cạnh tranh và độc quyền trong nền kinh tế thị trường; - Chương 5: Kinh tế thị trường định hướng xã hội chủ nghĩa và các quan hệ lợi ích kinh tế ở Việt Nam; - Chương 6: Công nghiệp hóa, hiện đại hoá và hội nhập kinh tế quốc tế của Việt Nam. Bên cạnh đó, cuối mỗi chương các tác giả tóm tắt lại nội dung của chương và đưa ra các thuật ngữ cần ghi nhớ, vấn đề thảo luận, câu hỏi ôn tập, giúp sinh viên nắm chắc và vận dụng các kiến thức đã học.",
+                222, 1));
+        booksList.add(new Books(11, "Hóa học nâng cao 12", "Lê Xuân Trọng (Chủ biên)",
+                "https://img.websosanh.vn/v10/users/review/images/y98kfh8vval77/sgk-hoa-12-nang-cao.jpg?compress=85",
+                1, "Sách Giáo Khoa Hóa Học Lớp 12 Nâng Cao được bộ Giáo Dục và Đào Tạo biên soạn và phát hành .Sách gồm chín chương đầy đủ công thức, lý thuyết, phương trình hóa học, chuyên đề hóa học …",
                 222, 1));
         for (Books book : booksList) {
             Books existingBook = db.bookDAO().getBookByNameAndAuthor(book.getBookName(), book.getBookAuthor());

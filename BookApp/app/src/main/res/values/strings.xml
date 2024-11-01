@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BookApp</string>
+    <string name="app_name">Bookiverse</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_account">Account</string>

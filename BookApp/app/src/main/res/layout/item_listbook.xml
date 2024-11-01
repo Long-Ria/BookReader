@@ -15,10 +15,10 @@
         android:layout_height="match_parent">
         <ImageView
 
-            android:background="@mipmap/ic_launcher_foreground"
+            android:background="@mipmap/new_launcher"
             android:layout_gravity="top|right"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
         <LinearLayout
 
             android:orientation="vertical"

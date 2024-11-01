@@ -7,19 +7,19 @@
     android:gravity="bottom"
     android:background="@drawable/bcakground1">
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@drawable/ic_launcher_background"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/logo_app"/>
     <TextView
         android:id="@+id/head_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trung Hieu"
+        android:text="user"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="25dp"/>
 
 
 </LinearLayout>

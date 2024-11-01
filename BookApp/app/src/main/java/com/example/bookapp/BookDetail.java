@@ -136,8 +136,6 @@ public class BookDetail extends AppCompatActivity {
     }
     private void setCategoriesData(){
 
-
-
         categories = new ArrayList<>();
         //         get data
         List<BookCategoryCrossRef> bookCategories = db.bookCategoryCrossRefDAO().getBookCategoryByBookId(book.getBookId());

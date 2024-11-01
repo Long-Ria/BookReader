@@ -79,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
                     } else {  // vai trò 1 = admin
                         intent = new Intent(LoginActivity.this, AdminActivity.class);
                     }
-                    // Truyền tên đăng nhập sang ChangePasswordActivity nếu cần
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {

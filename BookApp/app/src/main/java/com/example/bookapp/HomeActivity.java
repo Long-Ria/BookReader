@@ -84,6 +84,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         adapter = new ListBookAdapter(booksList, this);
         recyclerView.setAdapter(adapter);
 
+        String username = getIntent().getStringExtra("username");
+
+        // Setup the navigation header with username
+        setupNavigationHeader(username);
+
         insertBooks(db);
         insertAndDeleteCategories(db);
         insertBookCategoryCrossRefs(db);
@@ -104,7 +109,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                Toast.makeText(HomeActivity.this, categoryAdapter.getItem(i).getCategoryName(), Toast.LENGTH_SHORT).show();
+               Toast.makeText(HomeActivity.this, categoryAdapter.getItem(i).getCategoryName(), Toast.LENGTH_SHORT).show();
                 if (i > 0) {
                     Categories selectedCategory = categoriesList.get(i);
                     displayBooksByCategory(selectedCategory.getCategoryId());
@@ -147,9 +152,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         for (Books book : topBooks) {
             ImageView imageView = new ImageView(getApplicationContext());
-            Glide.with(getApplicationContext()).load(book.getImage()).into(imageView); // Assuming imageUrl is the field in your Books model
+            Glide.with(getApplicationContext()).load(book.getImage()).into(imageView);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setTag(book); // Set the book as a tag for later reference
+            imageView.setTag(book);
             viewFlipper.addView(imageView);
 
         }
@@ -188,7 +193,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void insertAndDeleteCategories(BookDatabase db) {
         String[] categoryNames = {
                 "Action", "Shounen", "Adventure", "Fantasy", "Romance",
-                "Mystery", "Horror", "Comedy", "Rom-com", "Novel", "Manhwa", "Manhua", "Manga"
+                "Mystery", "Horror", "Comedy", "Rom-com", "Novel", "Manhwa", "Manhua", "Manga", " Philosophy", "Culture",
+                "Education"
         };
 
         // Thêm các danh mục mới nếu chưa tồn tại
@@ -274,25 +280,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         db.chapterDAO().insertChapter(chapter4);
         db.chapterDAO().insertChapter(chapter5);
         db.chapterDAO().insertChapter(chapter6);
-
-
     }
     private void insertBookCategoryCrossRefs(BookDatabase db) {
         // One piece categories
-        Categories actionCategory = db.categoryDAO().getCategoryByName("Action");
-        Categories shounenCategory = db.categoryDAO().getCategoryByName("Shounen");
-        Categories adventureCategory = db.categoryDAO().getCategoryByName("Adventure");
-        Categories fantasyCategory = db.categoryDAO().getCategoryByName("Fantasy");
-        Categories romanceCategory = db.categoryDAO().getCategoryByName("Romance");
-        Categories mysteryCategory = db.categoryDAO().getCategoryByName("Mystery");
-        Categories horrorCategory = db.categoryDAO().getCategoryByName("Horror");
-        Categories comedyCategory = db.categoryDAO().getCategoryByName("Comedy");
-        Categories romcomCategory = db.categoryDAO().getCategoryByName("Rom-com");
-        Categories novelCategory = db.categoryDAO().getCategoryByName("Novel");
-        Categories manhwaCategory = db.categoryDAO().getCategoryByName("Manhwa");
-        Categories manhuaCategory = db.categoryDAO().getCategoryByName("Manhua");
-        Categories mangaCategory = db.categoryDAO().getCategoryByName("Manga");
-        Books onePiece = db.bookDAO().getBookByName("One piece");
+        Categories actionCategory = db.categoryDAO().getCategoryById(1);
+        Categories shounenCategory = db.categoryDAO().getCategoryById(2);
+        Categories adventureCategory = db.categoryDAO().getCategoryById(3);
+        Categories fantasyCategory = db.categoryDAO().getCategoryById(4);
+        Categories romanceCategory = db.categoryDAO().getCategoryById(5);
+        Categories mysteryCategory = db.categoryDAO().getCategoryById(6);
+        Categories horrorCategory = db.categoryDAO().getCategoryById(7);
+        Categories comedyCategory = db.categoryDAO().getCategoryById(8);
+        Categories romcomCategory = db.categoryDAO().getCategoryById(9);
+        Categories novelCategory = db.categoryDAO().getCategoryById(10);
+        Categories manhwaCategory = db.categoryDAO().getCategoryById(11);
+        Categories manhuaCategory = db.categoryDAO().getCategoryById(12);
+        Categories mangaCategory = db.categoryDAO().getCategoryById(13);
+        Categories philosophyCategory = db.categoryDAO().getCategoryById(14);
+        Categories cultureCategory = db.categoryDAO().getCategoryById(15);
+        Categories educationCategory = db.categoryDAO().getCategoryById(16);
+        Books onePiece = db.bookDAO().getBookById(4);
         if (onePiece != null) {
             insertCrossRef(db, onePiece, actionCategory);
             insertCrossRef(db, onePiece, shounenCategory);
@@ -302,7 +309,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Naruto categories
-        Books naruto = db.bookDAO().getBookByName("Naruto");
+        Books naruto = db.bookDAO().getBookById(5);
         if (naruto != null) {
             insertCrossRef(db, naruto, actionCategory);
             insertCrossRef(db, naruto, shounenCategory);
@@ -312,19 +319,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Kafka bên bờ biển categories
-        Books kafka = db.bookDAO().getBookByName("Kafka bên bờ biển");
+        Books kafka = db.bookDAO().getBookById(2);
         if (kafka != null) {
             insertCrossRef(db, kafka, novelCategory);
         }
 
         // Sự im lặng của bầy cừu categories
-        Books silenceOfTheLambs = db.bookDAO().getBookByName("Sự im lặng của bầy cừu");
+        Books silenceOfTheLambs = db.bookDAO().getBookById(3);
         if (silenceOfTheLambs != null) {
             insertCrossRef(db, silenceOfTheLambs, novelCategory);
         }
 
         // Fairy Tail categories
-        Books fairyTail = db.bookDAO().getBookByName("Fairy Tail");
+        Books fairyTail = db.bookDAO().getBookById(6);
         if (fairyTail != null) {
             insertCrossRef(db, fairyTail, actionCategory);
             insertCrossRef(db, fairyTail, shounenCategory);
@@ -334,7 +341,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Thiên sứ nhà bên categories
-        Books angelNextDoor = db.bookDAO().getBookByName("Thiên sứ nhà bên");
+        Books angelNextDoor = db.bookDAO().getBookById(7);
         if (angelNextDoor != null) {
             insertCrossRef(db, angelNextDoor, novelCategory);
             insertCrossRef(db, angelNextDoor, romanceCategory);
@@ -342,7 +349,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Horimiya categories
-        Books horimiya = db.bookDAO().getBookByName("Horimiya");
+        Books horimiya = db.bookDAO().getBookById(8);
         if (horimiya != null) {
             insertCrossRef(db, horimiya, novelCategory);
             insertCrossRef(db, horimiya, romanceCategory);
@@ -351,7 +358,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // FairyTail100 categories
-        Books fairyTail100 = db.bookDAO().getBookByName("Fairy Tail: Nhiệm vụ trăm năm");
+        Books fairyTail100 = db.bookDAO().getBookById(9);
         if (fairyTail100 != null) {
             insertCrossRef(db, fairyTail100, mangaCategory);
             insertCrossRef(db, fairyTail100, adventureCategory);
@@ -360,6 +367,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             insertCrossRef(db, fairyTail100, fantasyCategory);
 
         }
+
+        Books maclenin = db.bookDAO().getBookById(10);
+        if (maclenin != null) {
+            insertCrossRef(db, maclenin, philosophyCategory);
+            insertCrossRef(db, maclenin, cultureCategory);
+
+        }
+
 
     }
 
@@ -413,6 +428,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 1, "Tuyện tiếp nối chap 545 của Fairy Tail, khi nhóm Natsu đi làm nhiệm vụ trăm năm.\n" +
                 "Đây chỉ là một phần nhỏ trong hành trình của Hội Pháp Sư Nhiệm Vụ Trăm Năm – câu chuyện còn ẩn chứa nhiều bất ngờ và kịch tính hơn nữa, chắc chắn sẽ khiến bạn không thể rời mắt.",
                 321, 1));
+        booksList.add(new Books(10, "Giáo trình kinh tế chính trị Mác-Lênin", "PGS.TS. Ngô Tuấn Nghĩa (Chủ biên)",
+                "https://images.sachquocgia.vn/Picture/2024/3/21/image-20240321140730843.jpg",
+                1, "Nội dung giáo trình gồm 6 chương: - Chương 1: Đối tượng, phương pháp nghiên cứu và chức năng của kinh tế chính trị Mác - Lênin; - Chương 2: Hàng hóa, thị trường và vai trò của các chủ thể tham gia thị trường; - Chương 3: Giá trị thặng dư trong nền kinh tế thị trường; - Chương 4: Cạnh tranh và độc quyền trong nền kinh tế thị trường; - Chương 5: Kinh tế thị trường định hướng xã hội chủ nghĩa và các quan hệ lợi ích kinh tế ở Việt Nam; - Chương 6: Công nghiệp hóa, hiện đại hoá và hội nhập kinh tế quốc tế của Việt Nam. Bên cạnh đó, cuối mỗi chương các tác giả tóm tắt lại nội dung của chương và đưa ra các thuật ngữ cần ghi nhớ, vấn đề thảo luận, câu hỏi ôn tập, giúp sinh viên nắm chắc và vận dụng các kiến thức đã học.",
+                222, 1));
         for (Books book : booksList) {
             Books existingBook = db.bookDAO().getBookByNameAndAuthor(book.getBookName(), book.getBookAuthor());
             if (existingBook == null) {
@@ -432,7 +451,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         } else if (id == R.id.nav_change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
-
             String username = getIntent().getStringExtra("username");
             intent.putExtra("username", username);
             startActivity(intent);
@@ -493,5 +511,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupNavigationHeader(String username) {
+        // Inflate the navigation header view
+        View headerView = navigationView.getHeaderView(0);
+        TextView usernameTextView = headerView.findViewById(R.id.head_username); // Make sure this ID matches your layout
+
+        // Set the username to the TextView
+        if (usernameTextView != null && username != null) {
+            usernameTextView.setText(username);
+        }
     }
 }

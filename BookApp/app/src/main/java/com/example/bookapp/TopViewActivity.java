@@ -5,6 +5,8 @@ import static androidx.core.content.ContextCompat.startActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,6 +28,7 @@ public class TopViewActivity extends AppCompatActivity implements NavigationView
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     RecyclerView recyclerView;
+    private String username;
 
 
 
@@ -59,7 +62,12 @@ public class TopViewActivity extends AppCompatActivity implements NavigationView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.baseline_menu_24);  // Sử dụng biểu tượng menu tùy thích
 
+        username = getIntent().getStringExtra("username");
 
+        if (username == null) {
+            Toast.makeText(this, "Cannot found username", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
     }
 
@@ -68,13 +76,13 @@ public class TopViewActivity extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
         if (id == R.id.nav_home) {
             Intent intent = new Intent(this, HomeActivity.class);
-            String username = getIntent().getStringExtra("username");
+            username = getIntent().getStringExtra("username");
             intent.putExtra("username", username);
             startActivity(intent);
         } else if (id == R.id.nav_change_password) {
             Intent intent = new Intent(this, ChangePasswordActivity.class);
             // Truyền tên đăng nhập vào Intent
-            String username = getIntent().getStringExtra("username");
+            username = getIntent().getStringExtra("username");
             intent.putExtra("username", username);
             startActivity(intent);
         } else if (id == R.id.nav_log_out) {
